@@ -12,9 +12,11 @@ services:
       - app_network
 
   frontend:
-    build: ./frontend
+    build: ./frontend/frontend-docker
     ports:
       - "3000:3000"
+    volumes:
+      - ./frontend/frontend-docker:/app
     networks:
       - app_network
 
@@ -43,6 +45,8 @@ services:
       - backend
     networks:
       - app_network
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # Garantindo que o nginx.conf personalizado seja usado
 
 networks:
   app_network:

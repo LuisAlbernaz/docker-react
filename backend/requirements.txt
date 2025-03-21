@@ -3,3 +3,5 @@ uvicorn
 psycopg2-binary
 redis
 python-multipart
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4

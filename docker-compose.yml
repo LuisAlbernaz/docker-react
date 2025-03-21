@@ -1,56 +1,50 @@
-version: '3'
+version: '3.8'
 
 services:
   backend:
+    image: backend-image
     build: ./backend
     ports:
       - "8000:8000"
+    volumes:
+      - ./backend:/app  # Bind mount para desenvolvimento
+      - uploads:/app/uploads  # Volume para persistência de arquivos
     depends_on:
-      - postgres
+      - db
       - redis
-    networks:
-      - app_network
 
   frontend:
-    build: ./frontend/frontend-docker
+    build: ./frontend
     ports:
-      - "3000:3000"
-    volumes:
-      - ./frontend/frontend-docker:/app
-    networks:
-      - app_network
+      - "8080:8080"
+    depends_on:
+      - backend
 
-  postgres:
-    image: postgres:latest
+  db:
+    image: postgres:13
     environment:
       POSTGRES_USER: user
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: mydb
+      POSTGRES_DB: mydatabase
     volumes:
-      - postgres_data:/var/lib/postgresql/data
-    networks:
-      - app_network
+      - projeto2_postgres_data:/var/lib/postgresql/data  # Usa o volume existente
 
   redis:
-    image: redis:latest
-    networks:
-      - app_network
+    image: redis:6
+    volumes:
+      - projeto2_redis_data:/data
 
   nginx:
     build: ./nginx
     ports:
       - "80:80"
     depends_on:
-      - frontend
       - backend
-    networks:
-      - app_network
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf  # Garantindo que o nginx.conf personalizado seja usado
-
-networks:
-  app_network:
-    driver: bridge
+      - frontend
 
 volumes:
-  postgres_data:
+  projeto2_postgres_data:  # Volume existente para o PostgreSQL
+    external: true
+  projeto2_redis_data:     # Volume existente para o Redis
+    external: true
+  uploads: 

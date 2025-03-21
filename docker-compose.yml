@@ -27,12 +27,12 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: mydatabase
     volumes:
-      - projeto2_postgres_data:/var/lib/postgresql/data  # Usa o volume existente
+      - docker-react_postgres_data:/var/lib/postgresql/data  # Usa o volume existente
 
   redis:
     image: redis:6
     volumes:
-      - projeto2_redis_data:/data
+      - docker-react_redis_data:/data
 
   nginx:
     build: ./nginx
@@ -43,8 +43,8 @@ services:
       - frontend
 
 volumes:
-  projeto2_postgres_data:  # Volume existente para o PostgreSQL
+  docker-react_postgres_data:  # Volume existente para o PostgreSQL
     external: true
-  projeto2_redis_data:     # Volume existente para o Redis
+  docker-react_redis_data:     # Volume existente para o Redis
     external: true
   uploads: 
